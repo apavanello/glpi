@@ -24,6 +24,8 @@ services:
       - "80:80"
     networks:
      - backend
+    depends_on:
+     - mariadb
 
 networks:
   backend:
