@@ -17,7 +17,7 @@ services:
 #
 #
     glpi: 
-        image: fametec/glpi:9.5.6
+        image: sdbrasil/glpi:10.0.5
         restart: unless-stopped
         volumes: 
           - glpi-volume-files:/var/www/html/files:rw
@@ -30,7 +30,7 @@ services:
           MARIADB_DATABASE: glpi
           MARIADB_USER: glpi-user
           MARIADB_PASSWORD: glpi-pass
-          VERSION: "9.5.6"
+          VERSION: "10.0.5"
           PLUGINS: "all"
         depends_on: 
           - mariadb-glpi
