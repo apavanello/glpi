@@ -2,14 +2,14 @@ version: "3.8"
 
 services:
 #MariaDB Container
-  mariadb:
+  db:
     image: percona/percona-server:8.0
-    hostname: mariadb
+    hostname: db
     environment:
-      - MARIADB_ROOT_PASSWORD=password
-      - MARIADB_DATABASE=glpidb
-      - MARIADB_USER=glpi_user
-      - MARIADB_PASSWORD=glpi
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=glpidb
+      - MYSQL_USER=glpi_user
+      - MYSQL_PASSWORD=glpi
     networks:
      - backend
     ports:
