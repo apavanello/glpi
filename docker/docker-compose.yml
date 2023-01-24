@@ -12,6 +12,8 @@ services:
       - MARIADB_PASSWORD=glpi
     networks:
      - backend
+    ports:
+     - 3306:3306
 
 #GLPI Container
   glpi:
