@@ -41,6 +41,8 @@ services:
         networks: 
           - glpi-frontend
           - glpi-backend
+        entrypoint:
+         - "/usr/sbin/init"
 #
 # VOLUMES
 #
