@@ -1,60 +1,27 @@
-version: "3.7"
+version: "3.8"
+
 services:
-    percona-glpi: 
-        environment:
-            - MYSQL_ROOT_PASSWORD=ADM@MySQL_GLP1
-            - MYSQL_DATABASE=glpi
-            - MYSQL_USER=glpi
-            - MYSQL_PASSWORD=GLP1_MySQL@10
-            - TZ=America/Sao_Paulo
-        volumes:
-            - 'percona-volume-lib:/var/lib/mysql'
-            - 'percona-volume-log:/var/log/mysql'
-        image: 'percona/percona-server:5.7'
-        ports: 
-          - 3306:3306
-        networks: 
-          - glpi-backend
-#
-#
-    glpi: 
-        image: sdbrasil/glpi:10.0.5
-        restart: unless-stopped
-        volumes: 
-          - glpi-volume-files:/var/www/html/files:rw
-          - glpi-volume-plugins:/var/www/html/plugins:rw
-          - glpi-volume-config:/var/www/html/config:rw
-        environment: 
-          GLPI_LANG: pt_BR
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
-          VERSION: "10.0.5"
-          PLUGINS: "all"
-        depends_on: 
-          - percona-glpi
-        ports: 
-          - 8080:80
-          - 8443:443
-        networks: 
-          - glpi-frontend
-          - glpi-backend
-        entrypoint:
-         - "/usr/sbin/init"
-#
-# VOLUMES
-#
-volumes: 
-  glpi-volume-files:
-  glpi-volume-plugins:
-  glpi-volume-config:
-  percona-volume-lib:
-  percona-volume-log:
-#
-# NETWORKS
-#
-networks: 
-    glpi-frontend: 
-    glpi-backend:
+#MariaDB Container
+  mariadb:
+    image: percona/percona-server:8.0
+    hostname: mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_DATABASE=glpidb
+      - MARIADB_USER=glpi_user
+      - MARIADB_PASSWORD=glpi
+    networks:
+     - backend
+
+#GLPI Container
+  glpi:
+    image: diouxx/glpi
+    container_name : glpi
+    hostname: glpi
+    ports:
+      - "80:80"
+    networks:
+     - backend
+
+networks:
+- backend
