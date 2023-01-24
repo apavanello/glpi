@@ -1,19 +1,17 @@
 version: "3.3"
 services:
-    mariadb-glpi: 
-        image: fametec/glpi:9.5.6-mariadb
-        restart: unless-stopped
-        volumes: 
-          - mariadb-glpi-volume:/var/lib/mysql:rw
-        environment: 
-          MYSQL_DATABASE: glpi
-          MYSQL_USER: glpi-user 
-          MYSQL_PASSWORD: glpi-pass 
-          MYSQL_RANDOM_ROOT_PASSWORD: 1 
-        ports: 
-          - 3306:3306
-        networks: 
-          - glpi-backend
+    percona-glpi: 
+        container_name: db-glpi-10
+        environment:
+            - MYSQL_ROOT_PASSWORD=ADM@MySQL_GLP1
+            - MYSQL_DATABASE=glpi
+            - MYSQL_USER=glpi
+            - MYSQL_PASSWORD=GLP1_MySQL@10
+            - TZ=America/Sao_Paulo
+        volumes:
+            - 'percona-volume-lib:/var/lib/mysql'
+            - 'percona-volume-log:/var/log/mysql'
+        image: 'percona/percona-server:5.7'
 #
 #
     glpi: 
@@ -33,31 +31,11 @@ services:
           VERSION: "10.0.5"
           PLUGINS: "all"
         depends_on: 
-          - mariadb-glpi
+          - percona-glpi
         ports: 
           - 80:80
         networks: 
           - glpi-frontend
-          - glpi-backend
-#
-# CRON
-#
-    crond: 
-        image: fametec/glpi:9.5.6-crond
-        restart: unless-stopped
-        depends_on:
-          - mariadb-glpi
-        environment: 
-          MARIADB_HOST: mariadb-glpi
-          MARIADB_PORT: 3306
-          MARIADB_DATABASE: glpi
-          MARIADB_USER: glpi-user
-          MARIADB_PASSWORD: glpi-pass
-        volumes: 
-          - glpi-volume-files:/var/www/html/files:rw
-          - glpi-volume-plugins:/var/www/html/plugins:rw
-          - glpi-volume-config:/var/www/html/config:rw
-        networks: 
           - glpi-backend
 #
 # VOLUMES
@@ -66,7 +44,8 @@ volumes:
   glpi-volume-files:
   glpi-volume-plugins:
   glpi-volume-config:
-  mariadb-glpi-volume: 
+  percona-volume-lib:
+  percona-volume-log:
 #
 # NETWORKS
 #
