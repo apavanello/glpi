@@ -24,4 +24,4 @@ services:
      - backend
 
 networks:
-- backend
+  backend:
